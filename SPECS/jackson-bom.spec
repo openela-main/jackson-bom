@@ -1,5 +1,5 @@
 Name:          jackson-bom
-Version:       2.14.2
+Version:       2.19.1
 Release:       1%{?dist}
 Summary:       Bill of materials POM for Jackson projects
 License:       Apache-2.0
@@ -11,7 +11,7 @@ Source0:       %{url}/archive/%{name}-%{version}.tar.gz
 Source1:       http://www.apache.org/licenses/LICENSE-2.0.txt
 
 BuildRequires:  maven-local
-BuildRequires:  mvn(com.fasterxml.jackson:jackson-parent:pom:) >= 2.14
+BuildRequires:  mvn(com.fasterxml.jackson:jackson-parent:pom:) >= 2.19
 
 BuildArch:      noarch
 %if 0%{?fedora}
@@ -26,10 +26,14 @@ A "bill of materials" POM for Jackson dependencies.
 
 # Disable plugins not needed during RPM builds
 %pom_remove_plugin ":maven-enforcer-plugin" base
-%pom_remove_plugin ":nexus-staging-maven-plugin" base
+%pom_remove_plugin "org.sonatype.central:central-publishing-maven-plugin" base
 
 # New EE coords
 %pom_change_dep "javax.activation:javax.activation-api" "jakarta.activation:jakarta.activation-api:2" base
+
+
+# Remove dep on junit-bom
+%pom_remove_dep "org.junit:junit-bom" base
 
 %build
 %mvn_build -j
@@ -42,6 +46,10 @@ A "bill of materials" POM for Jackson dependencies.
 %license LICENSE
 
 %changelog
+* Thu Jul 31 2025 Red Hat PKI Team <rhcs-maint@redhat.com> - 2.19.1-1
+- Rebase to version 2.19.1
+- Resolves: RHEL-103106
+
 * Wed Nov 22 2023 Red Hat PKI Team <rhcs-maint@redhat.com> - 2.14.2-1
 - Rebase to upstream version 2.14.2
 
